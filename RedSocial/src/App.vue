@@ -1,16 +1,9 @@
 <template>
   <div>
-    <q-layout
-      view="lHh lpr lFf"
-      container
-      style="height: 100vh; overflow: hidden"
-      class="shadow-2 rounded-borders"
-    >
+    <q-layout view="lHh lpr lFf" container style="height: 100vh; overflow: hidden" class="shadow-2 rounded-borders">
       <!-- ========= ENCABEZADO ========= -->
       <q-header bordered class="bg-white">
-        <q-toolbar
-          class="text-primary items-center q-gutter-md row justify-center q-pa-md"
-        >
+        <q-toolbar class="text-primary items-center q-gutter-md row justify-center q-pa-md">
           <q-avatar>
             <img :src="LogoPag" />
           </q-avatar>
@@ -21,13 +14,7 @@
 
       <!-- ======== PIE DE PÁGINA ====== -->
       <q-footer bordered class="bg-grey-3 text-primary">
-        <q-tabs
-          no-caps
-          active-color="primary"
-          indicator-color="transparent"
-          class="text-grey-8"
-          v-model="tab"
-        >
+        <q-tabs no-caps active-color="primary" indicator-color="transparent" class="text-grey-8" v-model="tab">
           <q-tab name="parati" label="Para tí" />
           <q-tab name="tendencias" label="Tendencias" />
         </q-tabs>
@@ -39,11 +26,7 @@
           <!-- ======= Contenido  ======= -->
 
           <!-- Botón para abrir el modal -->
-          <q-btn
-            label="Agregar publicación"
-            color="primary"
-            @click="abrirModal"
-          />
+          <q-btn label="Agregar publicación" color="primary" @click="abrirModal" />
 
           <!-- Modal -->
           <q-dialog v-model="showModal">
@@ -53,141 +36,82 @@
               </q-card-section>
 
               <q-card-section>
-                <q-input
-                  filled
-                  v-model="nuevaPublicacion.nombreUsuario"
-                  label="Usuario"
-                  readonly
-                />
+                <q-input filled v-model="nuevaPublicacion.nombreUsuario" label="Usuario" readonly />
 
-                <q-input
-                  filled
-                  v-model="nuevaPublicacion.descripcion"
-                  label="Descripción"
-                  type="textarea"
-                />
-                <q-input
-                  filled
-                  v-model="nuevaPublicacion.fotoPerfil"
-                  label="URL Foto de perfil"
-                  readonly
-                />
+                <q-input filled v-model="nuevaPublicacion.descripcion" label="Descripción" type="textarea" />
 
                 <!-- SUBIR IMAGEN DESDE ARCHIVO -->
-                <q-file
-                  filled
-                  v-model="archivoImagen"
-                  label="Subir imagen desde el dispositivo"
-                  accept="image/*"
-                  @update:model-value="convertirImagen"
-                />
+                <q-file filled v-model="archivoImagen" label="Subir imagen desde el dispositivo" accept="image/*"
+                  @update:model-value="convertirImagen" />
 
-                <!-- OPCIONAL: URL DE IMAGEN -->
-                <q-input
-                  filled
-                  v-model="nuevaPublicacion.imagenPublicacion"
-                  label="o URL Imagen de publicación"
-                />
-
-                <q-select
-                  filled
-                  v-model="nuevaPublicacion.hashtags"
-                  :options="hashtagsOpciones"
-                  label="Hashtags"
-                  multiple
-                  use-input
-                  use-chips
-                  hide-dropdown-icon
-                  new-value-mode="add-unique"
-                  @new-value="agregarHashtag"
-                />
+                <q-select filled v-model="nuevaPublicacion.hashtags" :options="hashtagsOpciones" label="Hashtags"
+                  multiple use-chips hide-dropdown-icon />
               </q-card-section>
 
               <q-card-actions align="right">
                 <q-btn flat label="Cancelar" color="negative" v-close-popup />
-                <q-btn
-                  flat
-                  label="Agregar"
-                  color="primary"
-                  @click="agregarPublicacion"
-                />
+                <q-btn flat label="Agregar" color="primary" @click="agregarPublicacion" />
               </q-card-actions>
             </q-card>
           </q-dialog>
 
           <!-- Contenedor de cards existente -->
           <div v-show="tab === 'parati'">
-            <div
-              class="contenedor-cards row q-gutter-md justify-evenly q-pa-lg"
-            >
-              <CardParaTi
-                v-for="card in infoCards"
-                :key="card.nombreUsuario"
-                :card="card"
-              />
+            <div class="contenedor-cards row q-gutter-md justify-evenly q-pa-lg">
+              <CardParaTi v-for="card in infoCards" :key="card.nombreUsuario" :card="card" />
             </div>
           </div>
 
           <!-- Contenido TENDENCIAS -->
-          <div
-            v-show="tab === 'tendencias'"
-            class="column justify-center q-gutter-xl"
-          >
+          <div v-show="tab === 'tendencias'" class="column justify-center q-gutter-xl">
             <div>
               <h3 class="text-center">TENDENCIAS</h3>
             </div>
 
             <div class="row justify-around q-gutter-md">
+
               <!-- LIKES -->
-              <div class="column justify-center items-center q-gutter-md">
+              <div class=" ordenar column justify-center items-center q-gutter-md">
                 <div>
-                  <p>Likes</p>
+                  <h3 class="q-pb-xl">Likes</h3>
                 </div>
                 <div>
-                  <CardsLikes
-                    v-for="(item, i) in Likes"
-                    :key="i"
-                    :item="item"
-                  />
+                  <CardsLikes v-for="(item, i) in Likes" :key="i" :item="item" :imgTopLeft="LikeImg"
+                    :imgTopRight="LikeImg" :imgBottomLeft="LikeImg" :imgBottomRight="LikeImg" />
                 </div>
               </div>
 
-              <!-- COMPARTIDOS -->
-              <div class="column justify-center items-center q-gutter-md">
+              <!-- COMENTARIOS -->
+              <div class=" ordenar column justify-center items-center q-gutter-md">
                 <div>
-                  <p>Comentarios</p>
+                  <h3 class="q-pb-xl">Comentarios</h3>
                 </div>
                 <div>
-                  <CardsLikes
-                    v-for="(item, i) in Comentarios"
-                    :key="i"
-                    :item="item"
-                  />
+                  <CardsLikes v-for="(item, i) in Comentarios" :key="i" :item="item" :imgTopLeft="ComentarioImg"
+                    :imgTopRight="ComentarioImg" :imgBottomLeft="ComentarioImg" :imgBottomRight="ComentarioImg" />
                 </div>
               </div>
 
-              <!-- GLOBAL -->
-              <div class="column justify-center items-center q-gutter-md">
+              <!-- COMAPRTIDOS -->
+              <div class=" ordenar column justify-center items-center q-gutter-md">
                 <div>
-                  <p>Compartidos</p>
+                  <h3 class="q-pb-xl">Compartidos</h3>
                 </div>
                 <div>
-                  <CardsLikes
-                    v-for="(item, i) in Compartidos"
-                    :key="i"
-                    :item="item"
-                  />
+                  <CardsLikes v-for="(item, i) in Compartidos" :key="i" :item="item" :imgTopLeft="CompartidoImg"
+                    :imgTopRight="CompartidoImg" :imgBottomLeft="CompartidoImg" :imgBottomRight="CompartidoImg" />
                 </div>
               </div>
             </div>
 
             <!-- GLOBAL -->
-            <div class="column justify-center items-center q-gutter-md">
+            <div class=" global column justify-center items-center q-gutter-md">
               <div>
-                <p>Global</p>
+                <h3 class="q-pb-xl">Global</h3>
               </div>
-              <div>
-                <CardsLikes v-for="(item, i) in Global" :key="i" :item="item" />
+              <div class="ordenarglobal">
+                <CardsLikes v-for="(item, i) in Global" :key="i" :item="item" :imgTopLeft="GlobalImg"
+                  :imgTopRight="GlobalImg" :imgBottomLeft="GlobalImg" :imgBottomRight="GlobalImg" />
               </div>
             </div>
           </div>
@@ -202,10 +126,17 @@
 import { ref, reactive } from "vue";
 import LogoPag from "./assets/Logo.png";
 import CardsLikes from "./components/CardsLikes.vue";
+import LikeImg from "./assets/Likes.png";
+import ComentarioImg from "./assets/Comentarios.png";
+import CompartidoImg from "./assets/Compartidos.png";
+import GlobalImg from "./assets/Global.png";
+import { Likes, Comentarios, Compartidos, Global } from "./data/CardsTop.js";
+
+// ANDRES
 import CardParaTi from "./components/CardParaTi.vue";
 import cardsParatiData from "./data/cards.js";
 import { nombresEstilo, fotosPerfilRandom } from "./data/cards.js";
-import { Likes, Comentarios, Compartidos, Global } from "./data/CardsTop.js";
+
 
 const guardadas = JSON.parse(localStorage.getItem("publicaciones"));
 const infoCards = ref(guardadas || [...cardsParatiData.value]);
@@ -234,7 +165,7 @@ function abrirModal() {
 }
 
 function limpiarFormulario() {
-  nuevaPublicacion.nombreUsuario = ""; // 👈 nombre random
+  nuevaPublicacion.nombreUsuario = "";
   nuevaPublicacion.fotoPerfil = "";
   nuevaPublicacion.descripcion = "";
   nuevaPublicacion.imagenPublicacion = "";
@@ -253,7 +184,7 @@ function getFotoRandom() {
 }
 
 function agregarPublicacion() {
-  nuevaPublicacion.nombreUsuario = nombreAleatorio(); // asignar nombre aleatorio
+  nuevaPublicacion.nombreUsuario = nombreAleatorio();
   nuevaPublicacion.fotoPerfil = getFotoRandom();
   nuevaPublicacion.hashtags = [...nuevaPublicacion.hashtags];
 
@@ -284,14 +215,6 @@ const hashtagsOpciones = ref([
   "#WTF",
   "#CocinaFail",
 ]);
-
-function agregarHashtag(val, done) {
-  const hashtag = val.startsWith("#") ? val : "#" + val;
-  if (!hashtagsOpciones.value.includes(hashtag)) {
-    hashtagsOpciones.value.push(hashtag);
-  }
-  done(hashtag);
-}
 </script>
 
 
@@ -324,7 +247,6 @@ body {
   height: 50px;
 }
 
-/* CardParaTi */
 .q-dialog .q-card {
   border-radius: 18px;
   padding: 10px;
@@ -364,5 +286,26 @@ body {
 
 .q-card-actions {
   padding: 10px 15px;
+}
+
+h3 {
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.text-h3 {
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.ordenar {
+  margin: 0 !important;
+}
+
+
+.ordenarglobal{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
 }
 </style>
